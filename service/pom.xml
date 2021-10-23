@@ -13,16 +13,22 @@
     <packaging>pom</packaging>
     <modules>
         <module>service_user</module>
+        <module>service_hosp</module>
     </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.atguigu.yygh</groupId>
-            <artifactId>service-util</artifactId>
+            <groupId>com.sjq</groupId>
+            <artifactId>service_util</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.atguigu.yygh</groupId>
+            <groupId>com.sjq</groupId>
             <artifactId>model</artifactId>
             <version>1.0</version>
         </dependency>
@@ -36,6 +42,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
         <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>
@@ -48,20 +60,23 @@
             <optional>true</optional>
         </dependency>
         <!-- 服务调用feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <!-- 服务注册 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <!-- 流量控制 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
+
+<!--        </dependency>-->
+<!--        &lt;!&ndash; 服务注册 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
+
+<!--        </dependency>-->
+<!--        &lt;!&ndash; 流量控制 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>-->
+
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
