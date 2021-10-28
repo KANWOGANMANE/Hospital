@@ -8,7 +8,6 @@ import com.sjq.yygh.hosp.service.HospitalSetService;
 import com.sjq.yygh.model.hosp.HospitalSet;
 import com.sjq.yygh.common.result.*;
 import com.sjq.yygh.vo.hosp.HospitalQueryVo;
-import com.sun.xml.bind.v2.TODO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,7 @@ import java.util.Random;
 @Api(tags = "医院设置管理")
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
+@CrossOrigin //用于设置跨域
 public class HospitalSetController {
 
     @Autowired
@@ -59,7 +59,7 @@ public class HospitalSetController {
                                    @RequestBody(required = false) HospitalQueryVo vo){
         String hospname = vo.getHosname();
         String hospid = vo.getHoscode();
-        Page<HospitalSet> page = new Page<>();
+        Page<HospitalSet> page = new Page<>(current,limit);
         QueryWrapper<HospitalSet> queryWrapper = new QueryWrapper<>();
         if (!StringUtils.isEmpty(hospname)){
             queryWrapper.like("hosname",vo.getHosname());

@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.sjq</groupId>
-            <artifactId>common_util</artifactId>
+            <artifactId>common-util</artifactId>
             <version>1.0</version>
         </dependency>
 
