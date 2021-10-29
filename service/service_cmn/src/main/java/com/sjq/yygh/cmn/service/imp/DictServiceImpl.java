@@ -6,16 +6,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sjq.yygh.cmn.listener.DictListener;
 import com.sjq.yygh.cmn.mapper.DictMapper;
 import com.sjq.yygh.cmn.service.DictService;
-import com.sjq.yygh.common.result.Result;
 import com.sjq.yygh.model.cmn.Dict;
 import com.sjq.yygh.vo.cmn.DictEeVo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.Cacheable;
-
+import com.sjq.yygh.common.config.RedisConfig;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     //根据数据id查询数据字典
     @Override
-    @Cacheable(value = "dict")
+    @Cacheable(value = "dict") //keyGenerator = "keyGenerator",
     public List<Dict> findChildDdata(Long id) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id",id);
@@ -67,8 +65,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
 
     //导入数据字典
-    @CacheEvict(value = "dict", allEntries=true)
     @Override
+    @CacheEvict(value = "dict", allEntries=true)
     public void importDict(MultipartFile multipartFile){
         try {
             EasyExcel.read(multipartFile.getInputStream(),DictEeVo.class,new DictListener(baseMapper)).sheet().doRead();

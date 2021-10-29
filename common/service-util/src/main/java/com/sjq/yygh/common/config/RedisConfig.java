@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
-//@Configuration
-//@EnableCaching
+@Configuration
+@EnableCaching
 public class RedisConfig {
 
     /**
