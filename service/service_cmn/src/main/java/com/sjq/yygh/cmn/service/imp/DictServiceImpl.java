@@ -11,6 +11,7 @@ import com.sjq.yygh.vo.cmn.DictEeVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.Cacheable;
 import com.sjq.yygh.common.config.RedisConfig;
@@ -63,7 +64,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     }
 
-
     //导入数据字典
     @Override
     @CacheEvict(value = "dict", allEntries=true)
@@ -75,6 +75,42 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
+    @Override
+    public String getDictName(String dictCode, String value) {
+        //如果dictCode为空，直接根据value查询
+        if(StringUtils.isEmpty(dictCode)) {
+            //直接根据value查询
+            QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+            wrapper.eq("value",value);
+            Dict dict = baseMapper.selectOne(wrapper);
+            return dict.getName();
+        } else {//如果dictCode不为空，根据dictCode和value查询
+            //根据dictcode查询dict对象，得到dict的id值
+            Dict codeDict = this.getDictByDictCode(dictCode);
+            Long parent_id = codeDict.getId();
+            //根据parent_id和value进行查询
+            Dict finalDict = baseMapper.selectOne(new QueryWrapper<Dict>()
+                    .eq("parent_id", parent_id)
+                    .eq("value", value));
+            return finalDict.getName();
+        }
+//        if (StringUtils.isEmpty(dictcode)) {
+//            QueryWrapper<Dict> qw = new QueryWrapper();
+//            qw.eq("value", value);
+//            Dict dict = baseMapper.selectOne(qw);
+//            return dict.getName();
+//        }else {
+//            QueryWrapper<Dict> qw = new QueryWrapper();
+//            qw.eq("dict_code", dictcode);
+//            Dict codedict = baseMapper.selectOne(qw);
+//            Long parentid = codedict.getParentId();
+//            Dict dict = baseMapper.selectOne(new QueryWrapper<Dict>()
+//                    .eq("parent_id", parentid)
+//                    .eq("value",value));
+//            return dict.getName();
+//        }
+    }
+
     //判断id是否有子数据
     private boolean hasChild(Long id){
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
@@ -82,6 +118,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Integer count = baseMapper.selectCount(queryWrapper);
 
         return count>0;
+    }
+
+    private Dict getDictByDictCode(String dictCode) {
+        QueryWrapper<Dict> wrapper = new QueryWrapper<>();
+        wrapper.eq("dict_code",dictCode);
+        Dict codeDict = baseMapper.selectOne(wrapper);
+        return codeDict;
     }
 
 }

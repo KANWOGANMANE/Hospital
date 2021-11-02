@@ -43,4 +43,39 @@ public class DictController {
         return Result.ok();
     }
 
+
+    //根据dictcode和value查询
+    @GetMapping("getName/{dictCode}/{value}")
+    public String getName(@PathVariable String dictCode,
+                          @PathVariable String value) {
+        String dictName = dictService.getDictName(dictCode,value);
+        return dictName;
+    }
+
+    //根据value查询
+    @GetMapping("getName/{value}")
+    public String getName(@PathVariable String value) {
+        String dictName = dictService.getDictName("",value);
+        return dictName;
+    }
+
+
+
+//    //根据value值进行查询
+//    @GetMapping("getName/{value}")
+//    public String getName(@PathVariable String value){
+//        String dictname = dictService.getDictName("",value);
+//        return dictname;
+//    }
+//
+//    //根据dict_code和value值进行查询
+//    @GetMapping("getName/{dictcode}/{value}")
+//    public String getName(@PathVariable String dictcode,
+//                          @PathVariable String value){
+//
+//        String dictname = dictService.getDictName(dictcode,value);
+//
+//        return dictname;
+//    }
+
 }
