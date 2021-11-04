@@ -20,4 +20,6 @@ public interface DictService extends IService<Dict> {
     void importDict(MultipartFile multipartFile) throws IOException;
 
     String getDictName(String dictCode, String value);
+
+    List<Dict> findByDictCode(String dictCode);
 }

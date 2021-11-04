@@ -59,6 +59,14 @@ public class DictController {
         return dictName;
     }
 
+    //根据dictcode查询id，在根据id查询省
+    @ApiOperation("据dictcode查询下级节点")
+    @GetMapping("findByDictCode/{dictcode}")
+    public Result findByDictCode(@PathVariable String dictcode){
+        List<Dict> list = dictService.findByDictCode(dictcode);
+        return Result.ok(list);
+    }
+
 
 
 //    //根据value值进行查询

@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class HospitalServiceImpl implements HospitalService {
@@ -76,6 +77,41 @@ public class HospitalServiceImpl implements HospitalService {
         });
 
         return pages;
+    }
+
+    //根据ID更新Hospital的Status参数
+    @Override
+    public void updateStatus(String id, Integer status) {
+        Hospital hosp = hospitalRepository.findById(id).get();
+        hosp.setStatus(status);
+        hosp.setUpdateTime(new Date());
+        hospitalRepository.save(hosp);
+    }
+
+    /**
+     *
+     * @param id 根据id查询hospital信息
+     * @return   返回一个封装了hospital信息和rule的map
+     */
+    @Override
+    public Map<String,Object> findHospDetails(String id) {
+        Map<String, Object> result = new HashMap<>();
+        Hospital hospital = this.setHospitalHosType(hospitalRepository.findById(id).get());
+        result.put("hospital", hospital);
+
+//单独处理更直观
+        result.put("bookingRule", hospital.getBookingRule());
+//不需要重复返回
+        hospital.setBookingRule(null);
+        return result;
+
+//        Map<String,Object> hospital = new HashMap<String,Object>();
+//        Hospital hosp = this.setHospitalHosType(hospitalRepository.findById(id).get());
+//        hospital.put("hospital",hosp);
+//        hospital.put("bookingRule",hosp.getBookingRule());
+//        hosp.setBookingRule(null);
+//
+//        return hospital;
     }
 
     private Hospital setHospitalHosType(Hospital hospital) {

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.Cacheable;
-import com.sjq.yygh.common.config.RedisConfig;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,6 +108,16 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 //                    .eq("value",value));
 //            return dict.getName();
 //        }
+    }
+
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        //根据dictcode获取id
+        Dict dict = this.getDictByDictCode(dictCode);
+
+        //根据id获取子对象
+        List<Dict> childList = this.findChildDdata(dict.getId());
+        return childList;
     }
 
     //判断id是否有子数据
