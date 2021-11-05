@@ -114,6 +114,16 @@ public class HospitalServiceImpl implements HospitalService {
 //        return hospital;
     }
 
+    @Override
+    public String getHospname(String hoscode) {
+
+        Hospital hs = hospitalRepository.getHospitalByHoscode(hoscode);
+        if(hs != null){
+            return hs.getHosname();
+        }
+        return null;
+    }
+
     private Hospital setHospitalHosType(Hospital hospital) {
         //根据dictCode和value获取医院等级名称
         String hostypeString = dictFeignClient.getName("Hostype", hospital.getHostype());
