@@ -24,7 +24,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     //根据数据id查询数据字典
     @Override
-    @Cacheable(value = "dict") //keyGenerator = "keyGenerator",
+    //@Cacheable(value = "dict") //keyGenerator = "keyGenerator",
     public List<Dict> findChildDdata(Long id) {
         QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id",id);
@@ -110,6 +110,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 //        }
     }
 
+    //1
     @Override
     public List<Dict> findByDictCode(String dictCode) {
         //根据dictcode获取id

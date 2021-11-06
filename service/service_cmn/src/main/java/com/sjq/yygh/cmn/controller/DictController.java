@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +20,7 @@ public class DictController {
     @Autowired
     private DictService dictService;
 
+    //2
     //根据数据id查询数据列表
     @ApiOperation("根据数据id查询子数据列表")
     @GetMapping("findChildDdata/{id}")
@@ -58,6 +58,7 @@ public class DictController {
         return dictName;
     }
 
+    //1
     //根据dictcode查询id，在根据id查询省
     @ApiOperation("据dictcode查询下级节点")
     @GetMapping("findByDictCode/{dictcode}")
