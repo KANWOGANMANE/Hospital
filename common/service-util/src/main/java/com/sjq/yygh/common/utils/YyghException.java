@@ -1,5 +1,6 @@
 package com.sjq.yygh.common.utils;
 
+import com.sjq.yygh.common.result.ResultCodeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

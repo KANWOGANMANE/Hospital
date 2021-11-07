@@ -42,6 +42,16 @@ public enum ResultCodeEnum {
     SIGN_ERROR(300, "签名错误"),
     HOSPITAL_OPEN(310, "医院未开通，暂时不能访问"),
     HOSPITAL_LOCK(320, "医院被锁定，暂时不能访问"),
+
+
+    //-----------------------------------------------------------------------------------
+    PAY_PASSWORD_ERROR(401, "支付密码错误"),
+    REPEAT_ERROR(402, "重复提交"),
+
+    INVEST_AMMOUNT_MORE_ERROR(501, "出借金额已经多余标的金额"),
+    RETURN_AMMOUNT_MORE_ERROR(502, "还款金额不正确"),
+    PROJECT_AMMOUNT_ERROR(503, "标的金额不一致")
+
     ;
 
     private Integer code;

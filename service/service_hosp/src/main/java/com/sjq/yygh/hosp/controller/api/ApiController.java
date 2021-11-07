@@ -1,5 +1,6 @@
 package com.sjq.yygh.hosp.controller.api;
 
+import com.sjq.yygh.common.result.ResultCodeEnum;
 import com.sjq.yygh.hosp.service.ScheduleService;
 import com.sjq.yygh.model.hosp.Schedule;
 import com.sjq.yygh.vo.hosp.ScheduleQueryVo;
@@ -7,11 +8,11 @@ import org.springframework.data.domain.Page;
 import com.sjq.yygh.common.helper.HttpRequestHelper;
 import com.sjq.yygh.common.result.Result;
 import com.sjq.yygh.common.utils.MD5;
-import com.sjq.yygh.common.utils.ResultCodeEnum;
 import com.sjq.yygh.common.utils.YyghException;
 import com.sjq.yygh.hosp.service.DepartmentService;
 import com.sjq.yygh.hosp.service.HospitalService;
 import com.sjq.yygh.hosp.service.HospitalSetService;
+import com.sjq.yygh.common.result.ResultCodeEnum;
 import com.sjq.yygh.model.hosp.Department;
 import com.sjq.yygh.model.hosp.Hospital;
 import com.sjq.yygh.vo.hosp.DepartmentQueryVo;
