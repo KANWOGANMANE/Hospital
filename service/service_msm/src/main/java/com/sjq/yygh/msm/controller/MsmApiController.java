@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -21,24 +20,24 @@ public class MsmApiController {
     private MsmService msmService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
 
     @GetMapping("send/{phone}")
-    public Result send(@PathVariable String phone) {
+    public Result sendCode(@PathVariable String phone) throws Exception {
 
         //先在redis查找
-        Object code = redisTemplate.opsForValue().get(phone);
+        String code = redisTemplate.opsForValue().get(phone);
 
         //查看是否有验证码
         if( !StringUtils.isEmpty(code)){
             return Result.ok();
         }
 
-        //如果没有就生成
+        //如果没有就生成，然后发送
         code = RandomUtil.getSixBitRandom();
         boolean success = msmService.send(phone,code);
 
-        //如果success是ture设置有效时间
+        //如果success是ture,把code放进redis里设置有效时间
         if(success){
             redisTemplate.opsForValue().set( phone, code,2, TimeUnit.MINUTES);
             return Result.ok();

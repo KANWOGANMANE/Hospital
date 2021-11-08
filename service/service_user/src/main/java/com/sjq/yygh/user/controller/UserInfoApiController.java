@@ -21,6 +21,7 @@ public class UserInfoApiController {
     //用户手机号登陆
     @PostMapping("login")
     public Result MobileLogin(@RequestBody LoginVo loginVo) {
+        System.out.println("SHOUJI HAO"+loginVo.getPhone());
         Map<String, Object> map = userInfoService.LonginUserByMobile(loginVo);
         return Result.ok(map);
     }

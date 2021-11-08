@@ -10,6 +10,7 @@ import com.sjq.yygh.user.mapper.UserInfoMapper;
 import com.sjq.yygh.user.service.UserInfoService;
 import com.sjq.yygh.vo.user.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +19,9 @@ import java.util.Map;
 
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> implements UserInfoService{
+
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
 
     @Override
     public Map<String, Object> LonginUserByMobile(LoginVo loginVo) {
@@ -31,8 +35,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
 
-        //判断手机验证码和输入的是否一致
-        // TODO: 2021/11/7 判断手机验证码和输入的是否一致
+        // TODO: 2021/11/8 redistemplate取回的value多了双引号
+        //判断手机验证码和输入的验证码是否一致replace
+        String rediscode = redisTemplate.opsForValue().get(phone);
+        System.out.println("code"+code);
+        System.out.println("rediscode"+rediscode);
+        //没有取到redis的值
+        if(!code.equals(rediscode)) {
+            throw new YyghException(ResultCodeEnum.CODE_ERROR);
+        }
 
         //判断是否第一次登陆
         QueryWrapper<UserInfo> qw = new QueryWrapper();
