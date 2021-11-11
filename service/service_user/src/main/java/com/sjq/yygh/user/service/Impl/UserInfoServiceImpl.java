@@ -45,18 +45,30 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
             throw new YyghException(ResultCodeEnum.CODE_ERROR);
         }
 
-        //判断是否第一次登陆
-        QueryWrapper<UserInfo> qw = new QueryWrapper();
-        qw.eq("phone",phone);
-        UserInfo userInfo = baseMapper.selectOne(qw);
+        UserInfo userInfo = null;
+        if(!StringUtils.isEmpty(loginVo.getOpenid())) {
+            userInfo = this.selectWxInfoOpenid(loginVo.getOpenid());
+            if(null != userInfo) {
+                userInfo.setPhone(loginVo.getPhone());
+                this.updateById(userInfo);
+            } else {
+                throw new YyghException(ResultCodeEnum.DATA_ERROR);
+            }
+        }
 
-        //第一次登陆，就把数据存放到数据库
         if(userInfo == null){
-            userInfo = new UserInfo();
-            userInfo.setName("");
-            userInfo.setPhone(phone);
-            userInfo.setStatus(1);
-            baseMapper.insert(userInfo);
+            //判断是否第一次登陆
+            QueryWrapper<UserInfo> qw = new QueryWrapper();
+            qw.eq("phone",phone);
+            userInfo = baseMapper.selectOne(qw);
+            //第一次登陆，就把数据存放到数据库
+            if(userInfo == null){
+                userInfo = new UserInfo();
+                userInfo.setName("");
+                userInfo.setPhone(phone);
+                userInfo.setStatus(1);
+                baseMapper.insert(userInfo);
+            }
         }
 
         //判断User状态
@@ -80,5 +92,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
         map.put("tokne",token);
 
         return map;
+    }
+
+    @Override
+    public UserInfo selectWxInfoOpenid(String openid) {
+        QueryWrapper<UserInfo> qw = new QueryWrapper<>();
+        qw.eq("openid",openid);
+        UserInfo userInfo = baseMapper.selectOne(qw);
+        return userInfo;
     }
 }
