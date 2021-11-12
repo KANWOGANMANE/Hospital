@@ -1,14 +1,15 @@
 package com.sjq.yygh.user.controller;
 
 import com.sjq.yygh.common.result.Result;
+import com.sjq.yygh.common.utils.AuthContextHolder;
+import com.sjq.yygh.model.user.UserInfo;
 import com.sjq.yygh.user.service.UserInfoService;
 import com.sjq.yygh.vo.user.LoginVo;
+import com.sjq.yygh.vo.user.UserAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -24,5 +25,20 @@ public class UserInfoApiController {
         System.out.println("SHOUJI HAO"+loginVo.getPhone());
         Map<String, Object> map = userInfoService.LonginUserByMobile(loginVo);
         return Result.ok(map);
+    }
+
+    //用户认证
+    @PostMapping("auth/userAuth")
+    public Result userAuth(@RequestBody UserAuthVo userAuthVo, HttpServletRequest request){
+        userInfoService.userAuth(AuthContextHolder.getUserId(request),userAuthVo);
+        return Result.ok();
+    }
+
+    //获取用户id信息
+    @GetMapping("auth/getUserInfo")
+    public Result getUserInfo(HttpServletRequest request){
+        Long userId = AuthContextHolder.getUserId(request);
+        UserInfo UserInfo = userInfoService.getById(userId);
+        return Result.ok(UserInfo);
     }
 }

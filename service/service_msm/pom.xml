@@ -20,13 +20,17 @@
         <dependency>
         <groupId>com.aliyun</groupId>
         <artifactId>dysmsapi20170525</artifactId>
-    </dependency>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.sjq</groupId>
+            <artifactId>service-util</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
 </project>

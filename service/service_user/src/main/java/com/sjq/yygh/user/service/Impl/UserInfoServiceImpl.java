@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sjq.yygh.common.helper.JwtHelper;
 import com.sjq.yygh.common.result.ResultCodeEnum;
 import com.sjq.yygh.common.utils.YyghException;
+import com.sjq.yygh.enums.AuthStatusEnum;
 import com.sjq.yygh.model.user.UserInfo;
 import com.sjq.yygh.user.mapper.UserInfoMapper;
 import com.sjq.yygh.user.service.UserInfoService;
 import com.sjq.yygh.vo.user.LoginVo;
+import com.sjq.yygh.vo.user.UserAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -100,5 +102,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
         qw.eq("openid",openid);
         UserInfo userInfo = baseMapper.selectOne(qw);
         return userInfo;
+    }
+
+    @Override
+    public void userAuth(Long userId, UserAuthVo userAuthVo) {
+        //根据userid查询用户
+        UserInfo userInfo = baseMapper.selectById(userId);
+        //进行信息更新
+        userInfo.setName(userAuthVo.getName());
+        userInfo.setCertificatesType(userAuthVo.getCertificatesType());
+        userInfo.setCertificatesNo(userAuthVo.getCertificatesNo());
+        userInfo.setCertificatesUrl(userAuthVo.getCertificatesUrl());
+        userInfo.setAuthStatus(AuthStatusEnum.AUTH_RUN.getStatus());
+        baseMapper.updateById(userInfo);
     }
 }
