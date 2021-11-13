@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.sjq</groupId>
-            <artifactId>service_util</artifactId>
+            <artifactId>service-util</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

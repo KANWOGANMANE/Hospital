@@ -37,12 +37,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
             throw new YyghException(ResultCodeEnum.PARAM_ERROR);
         }
 
-        // TODO: 2021/11/8 redistemplate取回的value多了双引号
         //判断手机验证码和输入的验证码是否一致replace
         String rediscode = redisTemplate.opsForValue().get(phone);
-        System.out.println("code"+code);
-        System.out.println("rediscode"+rediscode);
-        //没有取到redis的值
+        System.out.println("code:"+code);
+        System.out.println("rediscode:"+rediscode);
+        //取到code的值不相等
         if(!code.equals(rediscode)) {
             throw new YyghException(ResultCodeEnum.CODE_ERROR);
         }
@@ -91,7 +90,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
 
         //生成token
         String token = JwtHelper.createToken(userInfo.getId(), name);
-        map.put("tokne",token);
+        map.put("token",token);
+        System.out.println(map.get("token"));
 
         return map;
     }

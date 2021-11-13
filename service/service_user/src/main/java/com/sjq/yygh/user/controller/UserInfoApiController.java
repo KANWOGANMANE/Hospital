@@ -22,7 +22,7 @@ public class UserInfoApiController {
     //用户手机号登陆
     @PostMapping("login")
     public Result MobileLogin(@RequestBody LoginVo loginVo) {
-        System.out.println("SHOUJI HAO"+loginVo.getPhone());
+        System.out.println("手机号:"+loginVo.getPhone());
         Map<String, Object> map = userInfoService.LonginUserByMobile(loginVo);
         return Result.ok(map);
     }
@@ -37,6 +37,8 @@ public class UserInfoApiController {
     //获取用户id信息
     @GetMapping("auth/getUserInfo")
     public Result getUserInfo(HttpServletRequest request){
+        System.out.println(request.toString());
+        System.out.println(request);
         Long userId = AuthContextHolder.getUserId(request);
         UserInfo UserInfo = userInfoService.getById(userId);
         return Result.ok(UserInfo);

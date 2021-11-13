@@ -107,6 +107,7 @@ public class WeiXinApiController extends BaseController{
             }
             String token = JwtHelper.createToken(userInfos.getId(), name);
             map.put("token", token);
+            System.out.println("token=>"+ map.get("token"));
             //跳转到页面
             return "redirect:" + WeiXinProperties.YYGH_BASE_URL +
                     "/weixin/callback?token="+map.get("token")+"&openid=" +
