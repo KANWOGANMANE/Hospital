@@ -1,22 +1,27 @@
 package com.sjq.yygh.user.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sjq.yygh.common.helper.JwtHelper;
 import com.sjq.yygh.common.result.ResultCodeEnum;
 import com.sjq.yygh.common.utils.YyghException;
 import com.sjq.yygh.enums.AuthStatusEnum;
+import com.sjq.yygh.model.user.Patient;
 import com.sjq.yygh.model.user.UserInfo;
 import com.sjq.yygh.user.mapper.UserInfoMapper;
+import com.sjq.yygh.user.service.PatientService;
 import com.sjq.yygh.user.service.UserInfoService;
 import com.sjq.yygh.vo.user.LoginVo;
 import com.sjq.yygh.vo.user.UserAuthVo;
+import com.sjq.yygh.vo.user.UserInfoQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,6 +29,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
 
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+
+    @Autowired
+    private PatientService patientService;
 
     @Override
     public Map<String, Object> LonginUserByMobile(LoginVo loginVo) {
@@ -115,5 +123,72 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper,UserInfo> im
         userInfo.setCertificatesUrl(userAuthVo.getCertificatesUrl());
         userInfo.setAuthStatus(AuthStatusEnum.AUTH_RUN.getStatus());
         baseMapper.updateById(userInfo);
+    }
+
+    @Override
+    public Page<UserInfo> selectPage(Page<UserInfo> pageParam, UserInfoQueryVo userInfoQueryVo) {
+        String name = userInfoQueryVo.getKeyword();
+        Integer status = userInfoQueryVo.getStatus();
+        Integer authStatus = userInfoQueryVo.getAuthStatus();
+        String createTimeBegin = userInfoQueryVo.getCreateTimeBegin();
+        String createTimeEnd = userInfoQueryVo.getCreateTimeEnd();
+
+        QueryWrapper<UserInfo> query = new QueryWrapper<UserInfo>();
+        if(!StringUtils.isEmpty(name)){
+            query.like("name",name);
+        }
+        if(!StringUtils.isEmpty(status)){
+            query.eq("status",status);
+        }
+        if(!StringUtils.isEmpty(authStatus)){
+            query.eq("auth_status",authStatus);
+        }
+        if(!StringUtils.isEmpty(createTimeBegin)){
+            query.ge("create_time",createTimeBegin);
+        }
+        if(!StringUtils.isEmpty(createTimeEnd)){
+            query.le("create_time",createTimeEnd);
+        }
+        Page<UserInfo> userInfoPage = baseMapper.selectPage(pageParam, query);
+        userInfoPage.getRecords().stream().forEach(item ->{
+            this.packageUserInfo(item);
+        });
+        return userInfoPage;
+    }
+
+    @Override
+    public void lock(Long userId, Integer status) {
+        if(status.intValue()==0 || status.intValue()==1){
+            UserInfo userInfo = baseMapper.selectById(userId);
+            userInfo.setStatus(status);
+            baseMapper.updateById(userInfo);
+        }
+    }
+
+    @Override
+    public Map<String, Object> show(Long userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        UserInfo userInfo = this.packageUserInfo(baseMapper.selectById(userId));
+        map.put("userInfo", userInfo);
+        List<Patient> allpatients = patientService.findAllUserId(userId);
+        map.put("patientList", allpatients);
+
+        return map;
+    }
+
+    @Override
+    public void approval(Long userId, Integer authStatus) {
+        if(authStatus.intValue()==2 || authStatus.intValue()==-1) {
+            UserInfo userInfo = baseMapper.selectById(userId);
+            userInfo.setAuthStatus(authStatus);
+            baseMapper.updateById(userInfo);
+        }
+    }
+
+    private UserInfo packageUserInfo(UserInfo item) {
+        item.getParam().put("authStatusString",AuthStatusEnum.getStatusNameByStatus(item.getAuthStatus()));
+        String statusString = item.getStatus().intValue()==0 ?"锁定":"正常";
+        item.getParam().put("status",statusString);
+        return item;
     }
 }

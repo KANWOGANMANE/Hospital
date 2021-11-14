@@ -1,4 +1,4 @@
-package com.sjq.yygh.user.controller;
+package com.sjq.yygh.user.api;
 
 import com.sjq.yygh.common.result.Result;
 import com.sjq.yygh.common.utils.AuthContextHolder;
@@ -8,7 +8,6 @@ import com.sjq.yygh.vo.user.LoginVo;
 import com.sjq.yygh.vo.user.UserAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
