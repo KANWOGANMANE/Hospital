@@ -3,8 +3,14 @@ package com.sjq.yygh.msm.servicec.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.client.utils.JSONUtils;
 import com.aliyun.dysmsapi20170525.Client;
+import com.aliyuncs.CommonRequest;
+import com.aliyuncs.CommonResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.profile.DefaultProfile;
 import com.sjq.yygh.msm.servicec.MsmService;
 import com.sjq.yygh.msm.utils.ConstantPropertiesUtils;
+import com.sjq.yygh.vo.msm.MsmVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import com.aliyun.dysmsapi20170525.models.*;
@@ -53,6 +59,23 @@ public class MsmServiceImpl implements MsmService {
         else{
             return false;
         }
+    }
+
+    //mq发送短信
+    @Override
+    public boolean send(MsmVo msmVo) throws Exception {
+        if(!StringUtils.isEmpty(msmVo.getPhone())){
+            String code = (String)msmVo.getParam().get("code");
+            boolean send = this.send(msmVo.getPhone(), code);
+            return send;
+        }
+        return false;
+    }
+
+
+    private boolean send(String phone, Map<String,Object> param){
+        System.out.println("diaoyong fang fa");
+        return true;
     }
 }
 

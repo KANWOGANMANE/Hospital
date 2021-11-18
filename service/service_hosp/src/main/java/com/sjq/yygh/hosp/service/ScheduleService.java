@@ -1,6 +1,7 @@
 package com.sjq.yygh.hosp.service;
 
 import com.sjq.yygh.model.hosp.Schedule;
+import com.sjq.yygh.vo.hosp.ScheduleOrderVo;
 import com.sjq.yygh.vo.hosp.ScheduleQueryVo;
 import org.springframework.data.domain.Page;
 import java.util.List;
@@ -20,4 +21,9 @@ public interface ScheduleService {
     Map<String, Object> getBookingScheduleRule(int page, int limit, String hoscode, String depcode);
 
     Schedule getById(String scheduleId);
+
+    ScheduleOrderVo getScheduleOrderVo(String scheduleId);
+
+    //更新排班数据
+    void update(Schedule schedule);
 }

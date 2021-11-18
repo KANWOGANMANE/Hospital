@@ -3,11 +3,14 @@ package com.sjq.yygh.hosp.controller.api;
 import com.sjq.yygh.common.result.Result;
 import com.sjq.yygh.hosp.service.DepartmentService;
 import com.sjq.yygh.hosp.service.HospitalService;
+import com.sjq.yygh.hosp.service.HospitalSetService;
 import com.sjq.yygh.hosp.service.ScheduleService;
 import com.sjq.yygh.model.hosp.Hospital;
 import com.sjq.yygh.model.hosp.Schedule;
 import com.sjq.yygh.vo.hosp.DepartmentVo;
 import com.sjq.yygh.vo.hosp.HospitalQueryVo;
+import com.sjq.yygh.vo.hosp.ScheduleOrderVo;
+import com.sjq.yygh.vo.order.SignInfoVo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class HospApiController {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private HospitalSetService hospitalSetService;
 
     //1
     @GetMapping(value = "findHospitalList/{page}/{limit}")
@@ -99,8 +105,19 @@ public class HospApiController {
         return Result.ok(scheduleService.getById(scheduleId));
     }
 
+    @ApiOperation(value = "根据排班id获取预约下单数据")
+    @GetMapping("inner/getScheduleOrderVo/{scheduleId}")
+    public ScheduleOrderVo getScheduleOrderVo(
+            @ApiParam(name = "scheduleId", value = "排班id", required = true)
+            @PathVariable("scheduleId") String scheduleId) {
+        return scheduleService.getScheduleOrderVo(scheduleId);
+    }
 
-
-
-
+    @ApiOperation(value = "获取医院签名信息")
+    @GetMapping("inner/getSignInfoVo/{hoscode}")
+    public SignInfoVo getSignInfoVo(
+            @ApiParam(name = "hoscode", value = "医院code", required = true)
+            @PathVariable("hoscode") String hoscode) {
+        return hospitalSetService.getSignInfoVo(hoscode);
+    }
 }
