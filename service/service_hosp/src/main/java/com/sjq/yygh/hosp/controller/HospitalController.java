@@ -4,7 +4,6 @@ import com.sjq.yygh.common.result.Result;
 import com.sjq.yygh.hosp.service.HospitalService;
 import com.sjq.yygh.model.hosp.Hospital;
 import com.sjq.yygh.vo.hosp.HospitalQueryVo;
-import com.sjq.yygh.vo.hosp.HospitalSetQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
